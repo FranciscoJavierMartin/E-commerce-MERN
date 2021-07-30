@@ -1,31 +1,16 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { auth } from '../../firebase';
 import { toast } from 'react-toastify';
 import { EMAIL_FOR_REGISTRATION } from '../../constants/localStorageKeys';
 
-const Register: React.FC = () => {
+const RegisterComplete: React.FC = () => {
   const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+
+  useEffect(() => {}, []);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    const config = {
-      url: process.env.REACT_APP_REGISTER_REDIRECT_URL || '',
-      handleCodeInApp: true,
-    };
-
-    try {
-      await auth.sendSignInLinkToEmail(email, config);
-      toast.success(
-        `Email is sent to ${email}. Click the link to complete your registration`
-      );
-
-      localStorage.setItem(EMAIL_FOR_REGISTRATION, email);
-
-      setEmail('');
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   return (
@@ -38,11 +23,17 @@ const Register: React.FC = () => {
               type='email'
               className='form-control'
               value={email}
+              disabled
+            />
+            <input
+              type='password'
+              className='form-control'
+              value={password}
               onChange={(event: ChangeEvent<HTMLInputElement>) =>
                 setEmail(event.target.value)
               }
               autoFocus
-              placeholder='Email'
+              placeholder='Password'
             />
             <button type='submit' className='btn btn-raised'>
               Register
@@ -54,4 +45,4 @@ const Register: React.FC = () => {
   );
 };
 
-export default Register;
+export default RegisterComplete;
